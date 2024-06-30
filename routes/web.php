@@ -26,3 +26,7 @@ Route::post('categories' , [CategoryController::class, 'store']);
 Route::get('categories/edit/{category}', [CategoryController::class, 'edit']);
 Route::put('categories/{category}', [CategoryController::class, 'update']);
 Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+
+Route::get('/dashboard', function(){
+    return view('layouts.dashboard');
+});

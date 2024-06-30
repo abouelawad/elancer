@@ -15,6 +15,8 @@ class CategoryController extends Controller
     public function index() : View
     {
         $categories = Category::get();
+        
+
 
         return view('categories.index',compact('categories'));
     }
@@ -28,21 +30,15 @@ class CategoryController extends Controller
 
     public function create() : View
     {
-        
+        $category= new Category ;
         $categories = Category::get();
-        return view('categories.create',compact('categories'));
+        return view('categories.create',compact('categories', 'category'));
     }
 
     public function store(Request $request) //: RedirectResponse
     {
-        $rules = [
-            'name'       => 'required|string|between:3,255',
-            'description'=>'required|string',
-            'parent_id'  =>'nullable|exists:categories,id',
-            'image'      =>'nullable|image',
-        ];
-        $messages = ['name'=>'the field :attribute is wrong ']; //example for edit error messages
-        $request->validate($rules,$messages);
+        $this->validateInputs($request);
+       
 
         Category::create($request->all());
 
@@ -60,8 +56,8 @@ class CategoryController extends Controller
 
     public function update(Request $request, $category) : RedirectResponse
     {
-        
         $category = Category::findOrFail($category);
+        $this->validateInputs($request) ;   
         $category->update($request->all());
        session()->flash('success','a new category has been edited');
         
@@ -74,5 +70,18 @@ class CategoryController extends Controller
        session()->flash('success','a category has been deleted');
 
         return back();
+    }
+
+    private function validateInputs($request) :array
+    {
+        $rules = [
+            'name'       => 'required|string|between:3,255',
+            'description'=>'required|string',
+            'parent_id'  =>'nullable|exists:categories,id',
+            'image'      =>'nullable|image',
+        ];
+        $messages = ['name'=>'the field :attribute is wrong ']; //example for edit error messages
+
+        return $request->validate($rules,$messages);
     }
 }

@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Show <a href="{{ url('categories/edit',['category'=> $category->id]) }}">edit</a></h1>
+@section('title page')
+Show
+<a class="btn btn-sm btn-outline-primary" href="{{ url('categories/edit',['category'=> $category->id]) }}">create</a>
+@endsection
+
 <table class="table table-light">
   <thead class="thead-light">
     <tr>
