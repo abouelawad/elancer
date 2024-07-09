@@ -3,7 +3,7 @@
 @section('content')
 @section('title page')
 Show
-<a class="btn btn-sm btn-outline-primary" href="{{ url('categories/edit',['category'=> $category->id]) }}">create</a>
+<a class="btn btn-sm btn-outline-primary" href="{{ route('categories.edit',['category'=> $category->id]) }}">create</a>
 @endsection
 
 <table class="table table-light">

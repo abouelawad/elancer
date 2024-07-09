@@ -6,7 +6,7 @@
 
 
 
-	<form action="{{ url('/categories') }}" method="post">
+	<form action="{{ route('categories.store') }}" method="post">
     @csrf
     @include('categories.form')
     <div class="form-group ">

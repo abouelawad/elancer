@@ -18,14 +18,20 @@ Route::get('/', function () {
     
     return view('welcome');
 });
+Route::prefix('/categories')->as('categories.')->group(function(){
 
-Route::get('categories', [CategoryController::class, 'index']);
-Route::get('categories/create', [CategoryController::class, 'create']);
-Route::get('categories/{category}', [CategoryController::class, 'show']);
-Route::post('categories' , [CategoryController::class, 'store']);
-Route::get('categories/edit/{category}', [CategoryController::class, 'edit']);
-Route::put('categories/{category}', [CategoryController::class, 'update']);
-Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+    Route::get('/', [CategoryController::class, 'index'])->name('name');
+    Route::get('/create', [CategoryController::class, 'create'])->name('create');
+    Route::get('/{category}', [CategoryController::class, 'show'])->name('show');
+    Route::post('/' , [CategoryController::class, 'store'])->name('store');
+    Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('edit');
+    Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
+    Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+
+});
+
+
+
 
 Route::get('/dashboard', function(){
     return view('layouts.dashboard');

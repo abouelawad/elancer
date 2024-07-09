@@ -5,17 +5,11 @@
     
     @section('title page')
     Categories
-    <a class="btn btn-sm btn-outline-primary" href="{{ url('categories/create') }}">create</a>
+    <a class="btn btn-sm btn-outline-primary" href="{{ route('categories.create') }}">create</a>
     @endsection
+    
       <div class="row">
-        @if(session()->has('success'))
-        <div class='alert alert-success alert-dismissible fade show' role ='alert'>
-            <strong>{{ session()->get('success') }}</strong>
-            <button type="button" class='close' data-dismiss="alert" area-label='close'>
-                <span area-hidden='true' >&times;</span>
-            </button>
-        </div>
-        @endif 
+        <x-flash-messages/>
       </div>
 
     <table class="table">
@@ -33,17 +27,17 @@
          @foreach ($categories as $category)
         <tr>
           <td>{{ $category->id }}</td>
-          <td><a href="{{ url('categories', ['category'=> $category->id]) }}">{{ $category->name }}</a></td>
+          <td><a href="{{ route('categories.show', ['category'=> $category->id]) }}">{{ $category->name }}</a></td>
           <td>{{ $category->description }}</td>
           <td>{{ $category->parent_id }}</td>
           <td>{{ $category->slug }}</td>
           <td id='basic-edit' class="align-middle text-center p-0">
 
             <div class="d-flex justify-content-center  form-inline ">
-              <a href="{{ url('categories/edit', ['category' => $category->id]) }}" class="btn-sm btn-primary m-2">
+              <a href="{{ route('categories.edit', ['category' => $category->id]) }}" class="btn-sm btn-primary m-2">
                  <span class="fe fe-edit"></span> Edit 
               </a>
-              <form class="form-inline" action="{{ url('categories', ['category' => $category->id]) }}" method="post">
+              <form class="form-inline" action="{{ route('categories.destroy', ['category' => $category->id]) }}" method="post">
                 @csrf
                 @method('delete')
                 <button type="submit" class="btn-sm btn-danger">
@@ -51,12 +45,10 @@
                 </button>
                 </form>
               </div>
-
             </td>
-
         </tr>
         @endforeach
       </tbody>
     </table>
-  
+  {{ $categories->links() }}
 @endsection

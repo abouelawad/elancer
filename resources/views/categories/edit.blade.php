@@ -3,7 +3,7 @@
 
 @section('content')
 @section('title page','Edit')
-	<form action="{{ url('/categories', ['category' => $category->id]) }}" method="post">
+	<form action="{{ route('categories.update', ['category' => $category->id]) }}" method="post">
 		@method('PUT')
 		@csrf
         @include('categories.form')
