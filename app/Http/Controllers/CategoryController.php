@@ -15,7 +15,10 @@ class CategoryController extends Controller
 {
     public function index() : View
     {
-        $categories = Category::paginate(2);
+        $categories = Category::leftJoin('categories as parents', 'parents.id','=','categories.parent_id')->
+                                select(['categories.*',
+                                        'parents.name as parent_name'])->
+                                paginate(5,'*','p');
         
 
 

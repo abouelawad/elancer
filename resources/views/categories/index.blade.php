@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('my-layouts.app')
 
 @section('content')
   
@@ -18,7 +18,7 @@
           <th>id</th>
           <th>name</th>
           <th>description</th>
-          <th>parent_id</th>
+          <th>parent</th>
           <th>slug</th>
           <th class="text-center">actions</th>
         </tr>
@@ -29,7 +29,7 @@
           <td>{{ $category->id }}</td>
           <td><a href="{{ route('categories.show', ['category'=> $category->id]) }}">{{ $category->name }}</a></td>
           <td>{{ $category->description }}</td>
-          <td>{{ $category->parent_id }}</td>
+          <td>{{ $category->parent_name }}</td>
           <td>{{ $category->slug }}</td>
           <td id='basic-edit' class="align-middle text-center p-0">
 

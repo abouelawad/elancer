@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('my-layouts.app')
 
 @section('content')
 @section('title page')
