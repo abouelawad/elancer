@@ -156,6 +156,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <li class="d-none d-sm-inline-block">
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+          @csrf
+      </form>
+        <a class="nav-link" href=""
+            onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+         
+         <i class="bx bx-log-out"></i> Logout
+     </a>
+
+      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -176,7 +188,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <img src="{{asset('assets/dashboard/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -302,5 +314,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('assets/dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/dashboard/dist/js/adminlte.min.js')}}"></script>
+
+<script>
+  $('#logoutLink').click(function(e) {
+      e.preventDefault();
+      $('#logoutForm').submit();
+  });
+</script>
+
 </body>
 </html>
