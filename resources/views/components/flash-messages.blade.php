@@ -15,3 +15,11 @@
     </button>
 </div>
 @endif 
+@if(session()->has('deleted'))
+<div class='alert alert-danger alert-dismissible fade show' role ='alert'>
+    <strong>{{ session()->get('deleted') }}</strong>
+    <button type="button" class='btn-close' data-bs-dismiss="alert" area-label='close'>
+        <span area-hidden='true' >&times;</span>
+    </button>
+</div>
+@endif 

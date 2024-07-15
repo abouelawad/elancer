@@ -18,10 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('landing', 'landing-page layout.app');
+Route::view('landing', 'layouts-landing-page.login');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('layouts-landing-page.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

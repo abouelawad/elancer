@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Console\View\Components\Alert;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\View\View as ViewView;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Console\View\Components\Alert;
+use Illuminate\Support\Facades\View as FacadesView;
 
 class CategoryController extends Controller 
 {
@@ -39,13 +41,14 @@ class CategoryController extends Controller
     public function store(Request $request) //: RedirectResponse
     {
         $this->validateInputs($request);
-       
-
-        Category::create($request->all());
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+        Category::create($data);
 
        session()->flash('success','a new category has been created');
         return redirect('categories');
     }
+
     public function edit($category) : View
     {
         
@@ -53,10 +56,11 @@ class CategoryController extends Controller
         $categories = Category::all();
         return view('categories.edit' ,compact('categories', 'category'));
     }
+
     public function update(Request $request, $category) : RedirectResponse
     {
         $category = Category::findOrFail($category);
-        $this->validateInputs($request) ;   
+        $this->validateInputs($request,$category) ;   
         $category->update($request->all());
        session()->flash('warning','a new category has been edited');
         
@@ -65,22 +69,24 @@ class CategoryController extends Controller
     public function destroy($category) :RedirectResponse
     {
         Category::destroy($category);
-       session()->flash('success','a category has been deleted');
+       session()->flash('deleted','a category has been deleted');
 
         return back();
     }
 
-    private function validateInputs($request) :array
+    private function validateInputs($request,$category = null ) :array
     {
+
+        
         $rules = [
-            'name'       =>'required|string|between:3,255',
+            // 'name'       =>"required|string|between:3,255|",
+            'name'       =>'required|string|between:3,255|unique:categories,name,'.(($category->id)??""),
             'description'=>'required|string',
             'parent_id'  =>'nullable|exists:categories,id',
             'image'      =>'nullable|image',
-            'slug'       =>'required|string'
+            
         ];
         $messages = ['name'=>'the field :attribute is wrong ']; //example for edit error messages
-
         return $request->validate($rules,$messages);
     }
 }
