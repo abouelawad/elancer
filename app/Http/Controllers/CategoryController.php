@@ -79,8 +79,12 @@ class CategoryController extends Controller
 
         
         $rules = [
-            // 'name'       =>"required|string|between:3,255|",
-            'name'       =>'required|string|between:3,255|unique:categories,name,'.(($category->id)??""),
+                /*
+                #NOTE - two approach methods to exclude the current id in edit 
+                */
+
+            // 'name'       =>'required|string|between:3,255|unique:categories,name,'.(($category->id)??""),
+            'name'       =>'required|string|between:3,255|'.Rule::unique('categories','name')->ignore($category->id??""),
             'description'=>'required|string',
             'parent_id'  =>'nullable|exists:categories,id',
             'image'      =>'nullable|image',
