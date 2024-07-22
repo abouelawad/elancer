@@ -18,11 +18,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('landing', 'layouts-landing-page.login');
+Route::view('landing', 'layouts-landing-page.login');  //trial Route::view style
 
-Route::get('/dashboard', function () {
-    return view('layouts-landing-page.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::group(['middleware'=>['auth', 'verified'],
+                'prefix' =>'dashboard',
+                'as' => 'dashboard.'
+            ],function(){
+                Route::get('/',function(){
+                        return view('layouts-landing-page.index');
+                        });
+                Route::view('/edit','freelancer/profiles.edit')->name('profile.edit');
+
+            }
+);
+
+// Route::get('/dashboard', function () {
+//     return view('layouts-landing-page.index');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,4 +44,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-require __DIR__.'/dashboard.php';
+

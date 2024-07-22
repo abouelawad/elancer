@@ -80,7 +80,7 @@ class CategoryController extends Controller
         
         $rules = [
                 /*
-                #NOTE - two approach methods to exclude the current id in edit 
+                #NOTE - two approach methods to exclude the current id in edit in name validation rule
                 */
 
             // 'name'       =>'required|string|between:3,255|unique:categories,name,'.(($category->id)??""),
