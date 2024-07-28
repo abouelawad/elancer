@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::view('landing', 'layouts-landing-page.login');  //trial Route::view style
 
@@ -26,7 +26,7 @@ Route::group(['middleware'=>['auth', 'verified'],
                 'as' => 'dashboard.'
             ],function(){
                 Route::get('/',function(){
-                        return view('layouts-landing-page.index');
+                        return view('layouts-hireo.index');
                         });
                 Route::view('/edit','freelancer/profiles.edit')->name('profile.edit');
 

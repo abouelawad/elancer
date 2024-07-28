@@ -12,7 +12,7 @@
 	<!-- Favicons -->
 	<link href="{{ asset('assets/landingpage/assets/img/favicon.png') }}" rel="icon">
 	<link href="{{ asset('assets/landingpage/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-
+	
 	<!-- Google Fonts -->
 	<link href="https://fonts.gstatic.com" rel="preconnect">
 	<link
@@ -562,6 +562,7 @@
 	<script src="{{ asset('assets/landingpage/assets/vendor/tinymce/tinymce.min.js') }}"></script>
 	<script src="{{ asset('assets/landingpage/assets/vendor/php-email-form/validate.js') }}"></script>
 
+	
 	<!-- Template Main JS File -->
 	<script src="{{ asset('assets/landingpage/assets/js/main.js') }}"></script>
 

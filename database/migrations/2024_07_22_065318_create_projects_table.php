@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                    ->constrained('users')
+                    ->cascadeOnDelete();
+                    
+            $table->foreignId('category_id')
+                    ->constrained('categories')
+                    ->cascadeOnDelete();
+
+            $table->string('title');
+            $table->text('description');
+            $table->enum('status',['open','in progress','closed']);
+            $table->enum('type',['hourly','fixed'])->nullable();
+            $table->unsignedFloat('budget')->nullable();
             $table->timestamps();
         });
     }

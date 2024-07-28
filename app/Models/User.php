@@ -48,4 +48,9 @@ class User extends Authenticatable
         return $this->hasOne(Freelancer::class,'user_id','id')
         ->withDefault();
     }
+
+    public function projects(){
+        return $this->hasMany(Project::class);
+    }
 }
+ 

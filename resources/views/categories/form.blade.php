@@ -3,14 +3,14 @@
             label='Name' id='name' 
             type='text'
             name='name'
-            value="{{$category->name}}"
+            categoryValue="{{$category->name}}"
             
     />    
 </div>
 
 <div class="form-group">
   <x-categories.input
-     id='slug' label='Slug' type='text' name='slug' :value="$category->slug"
+     id='slug' label='Slug' type='text' name='slug' :categoryValue="$category->slug"
   />
 </div>
 

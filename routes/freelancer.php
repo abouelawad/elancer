@@ -12,9 +12,7 @@ Route::group([
   'as'    =>'freelance.profile.',
   'middleware'=>'auth'
 ],function(){
-  Route::get('/', function () {
-    return 'update done';
-});
+  Route::get('/' , [ProfileController::class, 'index'])->name('index');
   Route::get('/create', [ProfileController::class, 'create'])->name('create');
   // Route::get('/{profile}', [ProfileController::class, 'show'])->name('show');
   // Route::post('/' , [ProfileController::class, 'store'])->name('store');
