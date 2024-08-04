@@ -84,7 +84,6 @@
             @error('password')
             <p class="invalid-feedback">{{ $message }} </p>
             @enderror
-  
 					</div>
 
 					<div class="input-with-icon-left">

@@ -9,7 +9,7 @@ Route::group([
   'as'    =>'client.projects.',
   'middleware'=>'auth'
 ],function(){
-  Route::get('/', [ProjectController::class, 'index'])->name('name');
+  Route::get('/', [ProjectController::class, 'index'])->name('index');
   Route::get('/create', [ProjectController::class, 'create'])->name('create');
   Route::get('/{project}', [ProjectController::class, 'show'])->name('show');
   Route::post('/' , [ProjectController::class, 'store'])->name('store');

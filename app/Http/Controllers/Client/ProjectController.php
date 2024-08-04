@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Project;
+use App\Enums\Project as EnumProject;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,8 +18,8 @@ class ProjectController extends Controller
      
         $user = Auth::user();
         
-        $projects = Project::where('user_id',$user->id)->paginate();
-        $projects = $user->projects()->paginate();
+        // $projects = Project::where('user_id',$user->id)->paginate();
+        $projects = $user->projects()->with('category.parent')->paginate();
 
         return view('client.projects.index', compact('projects'));
     }
@@ -25,7 +27,14 @@ class ProjectController extends Controller
     public function create()
     { 
         $project = new Project();
-        return view('client.projects.create',compact('project'));
+        $project->type = $project->types();
+        $project->status = $project->statuses();
+        $categories = Category::orderBy("id")->pluck('name','id');
+
+        
+
+   
+        return view('client.projects.create',compact('project','categories'));
     }
 
     public function show($project)
@@ -38,6 +47,7 @@ class ProjectController extends Controller
 
     public function store(Request $request):RedirectResponse
     {
+        
         $request->validate(['title'=>'required|string|max:255',
                             'description' =>'required|string',
                             'type'=>'required|in:hourly,fixed',
@@ -49,7 +59,9 @@ class ProjectController extends Controller
          *  $project = Project::create($request->all()); 
          */
 
-        $project = $request->user()->projects()->create($request->all());
+       
+
+        $request->user()->projects()->create($request->all());
         session()->flash('success','a new project has been created');
 
         return redirect(route('client.projects.index'));
@@ -59,8 +71,12 @@ class ProjectController extends Controller
     {
         $user = Auth::user();
         $project = $user->projects()->findOrFail($project);
+        $categories=Category::orderBy('id')->pluck('name','id');
 
-        return view('client.projects.edit',compact('project'));
+        
+
+
+        return view('client.projects.edit',compact('project','categories'));
     }
 
     public function update(Request $request,$project)
@@ -73,7 +89,10 @@ class ProjectController extends Controller
                             ]);
 
         $user = Auth::user();
-        $project = $user->projects()->update($request->all());
+
+        $project = $user->projects()->findOrFail($project);
+
+        $project->update($request->all());
 
         session()->flash('success','the project has been updated successfully');
         return redirect(route('client.projects.index'));
@@ -81,6 +100,8 @@ class ProjectController extends Controller
 
     public function destroy($project)
     {
-    # code...
+        Project::destroy($project);
+        session()->flash('deleted','project has been deleted successfully');
+        return back();
     }
 }
