@@ -120,7 +120,7 @@
 												<!-- Job Listing Footer -->
 												<div class="job-listing-footer">
 													<ul>
-														<li><i class="icon-material-outline-date-range"></i> Posted on 10 July, 2018</li>
+														<li><i class="icon-material-outline-date-range"></i> Posted on: {{ $project->created_at }}</li>
 														<li><i class="icon-material-outline-date-range"></i> Category: <strong>{{ $project->category->parent->name }}/{{ $project->category->name }}</strong></li>
 													</ul>
 												</div>
