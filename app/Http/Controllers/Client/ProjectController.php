@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Tag;
 use App\Models\Project;
-use App\Enums\Project as EnumProject;
+use App\Models\Category;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Project as EnumProject; //I didn't need it as I used Enum class directly in the view file
+use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
 {
@@ -19,7 +21,8 @@ class ProjectController extends Controller
         $user = Auth::user();
         
         // $projects = Project::where('user_id',$user->id)->paginate();
-        $projects = $user->projects()->with('category.parent')->paginate();
+        $projects = $user->projects()->with('category.parent','tags')->paginate();
+        
 
         return view('client.projects.index', compact('projects'));
     }
@@ -72,26 +75,42 @@ class ProjectController extends Controller
         $user = Auth::user();
         $project = $user->projects()->findOrFail($project);
         $categories=Category::orderBy('id')->pluck('name','id');
+        $tags = $project->tags->pluck('name')->toArray();
 
+        // dd($project->tags()->pluck('name'),$project->tags->pluck('name')->toArray());
         
-
-
-        return view('client.projects.edit',compact('project','categories'));
+        return view('client.projects.edit',compact('project','categories','tags'));
     }
 
     public function update(Request $request,$project)
     {
-
         $request->validate(['title'=>'required|string|max:255',
                             'description' =>'required|string',
                             'type'=>'required|in:hourly,fixed',
                             'budget'=>'nullable|numeric|min:0',
                             ]);
-
+        #retrieve the user and project
         $user = Auth::user();
-
         $project = $user->projects()->findOrFail($project);
 
+        #clear data of tags from request
+        $tags = (explode(',',$request->tags));
+        $tags_ids = [];
+
+        #prepare tags' data  
+        foreach($tags as $tagName){
+           $tag =  Tag::firstOrCreate([
+                'slug'=> Str::slug($tagName),
+                ],[
+                    'name'=> trim($tagName) ,
+                ]);
+            $tags_ids[] = $tag->id;
+        }
+        
+        # Save data of tags
+        $project->tags()->sync($tags_ids);
+
+        # Save data of request
         $project->update($request->all());
 
         session()->flash('success','the project has been updated successfully');

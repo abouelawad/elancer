@@ -151,7 +151,7 @@
 											<h5>Category</h5>
 											<select class="selectpicker with-border" data-size="7" title="Select Job Category" name="category_id">
 												@foreach ($categories as $category_id => $category_name)
-												<option value="{{($category_id)}}" @if(isset($project->category_id)) selected @endif>{{$category_name}}</option>
+												<option value="{{$category_id}}" @if($category_id==$project->category_id) selected @endif>{{$category_name}}</option>
 												@endforeach
 											</select>
 										</div>
@@ -176,21 +176,25 @@
 										</div>
 									</div>
 
-									{{-- <div class="col-xl-4">
+									<div class="col-xl-4">
 										<div class="submit-field">
 											<h5>Tags <span>(optional)</span> <i class="help-icon" data-tippy-placement="right"
 													title="Maximum of 10 tags"></i></h5>
 											<div class="keywords-container">
 												<div class="keyword-input-container">
-													<input type="text" class="keyword-input with-border" placeholder="e.g. job title, responsibilites" />
-													<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
+													<input type="text" class="keyword-input with-border" name="tags" placeholder="e.g. job title, responsibilites" 
+													value=" {{implode(', ',$tags)}} "
+													{{-- value="@foreach ($tags as $tag) {{trim($tag.",")}} @endforeach" --}}
+												
+													/>
+													<button type="button" class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
 												</div>
 												<div class="keywords-list"><!-- keywords go here --></div>
 												<div class="clearfix"></div>
 											</div>
 
 										</div>
-									</div> --}}
+									</div>
 
 									<div class="col-xl-12">
 										<div class="submit-field">

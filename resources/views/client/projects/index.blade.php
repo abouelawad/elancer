@@ -122,6 +122,8 @@
 													<ul>
 														<li><i class="icon-material-outline-date-range"></i> Posted on: {{ $project->created_at }}</li>
 														<li><i class="icon-material-outline-date-range"></i> Category: <strong>{{ $project->category->parent->name }}/{{ $project->category->name }}</strong></li>
+														<li><i class="icon-material-outline-date-range"></i> Tags: @foreach ($project->tags as $tag ) <span class="dashboard-status-button yellow"> {{ $tag->name }} </span> @endforeach  </li>
+
 													</ul>
 												</div>
 											</div>
