@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('landing', 'layouts-landing-page.login');  //trial Route::view style
 
 
-Route::group(['middleware'=>['auth', 'verified'],
+Route::group(['middleware'=>['auth'],
                 'prefix' =>'dashboard',
                 'as' => 'dashboard.'
             ],function(){

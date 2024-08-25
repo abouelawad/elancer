@@ -109,7 +109,7 @@
     @endif
 
 							<div class="content with-padding padding-bottom-10">
-								<form action="{{ route('client.projects.store') }}" method="POST">
+								<form action="{{ route('client.projects.store') }}" method="POST" enctype="multipart/form-data">
 									@csrf
 								<div class="row">
 
@@ -197,14 +197,15 @@
 											<h5>Job Description</h5>
 											<textarea cols="30" rows="5" class="with-border" name="description" @error('description') is-invalid @enderror></textarea>
 											@error('description')
-											<p class="invalid-feedback">{{ $message }} </p>
-										@enderror
+												<p class="invalid-feedback">{{ $message }} </p>
+											@enderror
+											
 											<div class="uploadButton margin-top-30">
-												<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload"
-													multiple />
+												<input class="uploadButton-input" type="file" accept="image/*, application/pdf" name="attachments[]" id="upload"  multiple/>
 												<label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
 												<span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
 											</div>
+										
 										</div>
 									</div>
 

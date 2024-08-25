@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable=['title','user_id','category_id','description','status','type','budget'];
+    protected $fillable=['title','user_id','category_id','description','status','type','budget','attachments'];
    
 
     /** NOTE
@@ -17,7 +17,8 @@ class Project extends Model
      * 
      * Reference Safadi elancer e15 @9:15
      */
-
+    public $casts=['attachments'=>'json'];
+    
     const TYPES=['fixed'=>'fixed','hourly'=>'hourly'];
     const STATUSES = ['open'=>'open','in progress'=>'in progress','closed'=>'closed'];
 

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_tag', function (Blueprint $table) {
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
-            $table->primary(['project_id', 'tag_id']);
+            $table->primary(['project_id', 'tag_id']); // this line because i removed the id column and i need a primary key 
         });
     }
 

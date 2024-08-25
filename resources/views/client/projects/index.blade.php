@@ -74,6 +74,7 @@
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
 				<h3>Manage Jobs</h3>
+				<a class="btn btn-sm btn-outline-primary" href="{{ route('client.projects.create') }}">create</a>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
@@ -84,7 +85,6 @@
 					</ul>
 				</nav>
 			</div>
-
 			<!-- Row -->
 			<div class="row">
 				
@@ -122,7 +122,11 @@
 													<ul>
 														<li><i class="icon-material-outline-date-range"></i> Posted on: {{ $project->created_at }}</li>
 														<li><i class="icon-material-outline-date-range"></i> Category: <strong>{{ $project->category->parent->name }}/{{ $project->category->name }}</strong></li>
-														<li><i class="icon-material-outline-date-range"></i> Tags: @foreach ($project->tags as $tag ) <span class="dashboard-status-button yellow"> {{ $tag->name }} </span> @endforeach  </li>
+														<li>
+															<i class="icon-material-outline-date-range"></i>
+															Tags: @foreach ($project->tags as $tag ) 
+																<span class="dashboard-status-button yellow"> {{ $tag->name }} </span> @endforeach  
+														</li>
 
 													</ul>
 												</div>

@@ -17,26 +17,26 @@ class ProjectController extends Controller
 {
     public function index(): View
     {
-     
+
         $user = Auth::user();
-        
+
         // $projects = Project::where('user_id',$user->id)->paginate();
         $projects = $user->projects()->with('category.parent','tags')->paginate();
-        
+
 
         return view('client.projects.index', compact('projects'));
     }
 
     public function create()
-    { 
+    {
         $project = new Project();
         $project->type = $project->types();
         $project->status = $project->statuses();
         $categories = Category::orderBy("id")->pluck('name','id');
 
-        
 
-   
+
+
         return view('client.projects.create',compact('project','categories'));
     }
 
@@ -48,23 +48,53 @@ class ProjectController extends Controller
         return view('client.projects.show',compact('project'));
     }
 
-    public function store(Request $request):RedirectResponse
+    public function store(Request $request)//:RedirectResponse
     {
-        
+
         $request->validate(['title'=>'required|string|max:255',
                             'description' =>'required|string',
                             'type'=>'required|in:hourly,fixed',
                             'budget'=>'nullable|numeric|min:0',
                             ]);
+
+        // dd($request);
+        $data = $request->except('attachments');
+        if($request->hasFile('attachments'))
+        {
+            $files = $request->file('attachments');
+            $attachments=[];
+            foreach($files as $file){
+                if($file->isValid()){
+                    $path = $file->store('/attachments',['disk'=>'public']);
+                    $attachments[]=$path;
+                }
+            }
+            $data['attachments']=$attachments;
+        }
+
         /**
          * This code is a reference for the relation in User model short cut in the line below
-         *  $request->merge(['user_id'=>$request->user()->id]); 
-         *  $project = Project::create($request->all()); 
+         *  $request->merge(['user_id'=>$request->user()->id]);
+         *  $project = Project::create($request->all());
          */
+        $project = $request->user()->projects()->create($data);
+        $tags = explode(',', $request->tags );
+        $tagIds=[];
 
-       
+        #prepare tags' data
+        foreach($tags as $tagName){
+            $tag =  Tag::firstOrCreate([
+                'slug'=> Str::slug($tagName),
+                ],[
+                    'name'=> trim($tagName) ,
+                ]);
+            $tagIds[] = $tag->id;
+        }
 
-        $request->user()->projects()->create($request->all());
+        # Save data of tags
+        $project->tags()->sync($tagIds);
+
+        #create session with succession
         session()->flash('success','a new project has been created');
 
         return redirect(route('client.projects.index'));
@@ -78,7 +108,7 @@ class ProjectController extends Controller
         $tags = $project->tags->pluck('name')->toArray();
 
         // dd($project->tags()->pluck('name'),$project->tags->pluck('name')->toArray());
-        
+
         return view('client.projects.edit',compact('project','categories','tags'));
     }
 
@@ -89,15 +119,40 @@ class ProjectController extends Controller
                             'type'=>'required|in:hourly,fixed',
                             'budget'=>'nullable|numeric|min:0',
                             ]);
+
+
         #retrieve the user and project
         $user = Auth::user();
         $project = $user->projects()->findOrFail($project);
+        #check the attachments
+
+        $data=$request->except('attachments');
+
+
+        if($request->hasFile('attachments')){
+        
+            $files = $request->file('attachments');
+            $attachments=[];
+            foreach($files as $file)
+            {
+                if($file->isValid())
+                {
+                    $path=$file->store('/attachments',['disk'=>'public']);
+                    $attachments[] = $path;
+                }
+            }
+
+            $data['attachments']=$attachments;
+        }
+
+
+
 
         #clear data of tags from request
-        $tags = (explode(',',$request->tags));
+        $tags = explode(',',$request->tags);
         $tags_ids = [];
 
-        #prepare tags' data  
+        #prepare tags' data
         foreach($tags as $tagName){
            $tag =  Tag::firstOrCreate([
                 'slug'=> Str::slug($tagName),
@@ -106,12 +161,12 @@ class ProjectController extends Controller
                 ]);
             $tags_ids[] = $tag->id;
         }
-        
+
         # Save data of tags
         $project->tags()->sync($tags_ids);
 
         # Save data of request
-        $project->update($request->all());
+        $project->update($data);
 
         session()->flash('success','the project has been updated successfully');
         return redirect(route('client.projects.index'));

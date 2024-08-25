@@ -109,7 +109,7 @@
     @endif
 
 							<div class="content with-padding padding-bottom-10">
-								<form action="{{ route('client.projects.update',['project'=>$project->id]) }}" method="POST">
+								<form action="{{ route('client.projects.update',['project'=>$project->id]) }}" method="POST" enctype="multipart/form-data">
 									@csrf @method('put')
 								<div class="row">
 
@@ -204,11 +204,23 @@
 											<p class="invalid-feedback">{{ $message }} </p>
 										@enderror
 											<div class="uploadButton margin-top-30">
-												<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload"
-													multiple />
+												
+                                                <input class="uploadButton-input" type="file" accept="image/*, application/pdf" name="attachments[]" id="upload"  multiple/>
 												<label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
 												<span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
 											</div>
+											
+											@if ($project->attachments)
+												<div>
+													<ul>
+														@foreach ($project->attachments as $attachment)
+															<li>
+																<a href="{{ asset('/storage/'.$attachment) }}">{{ baseName($attachment) }}</a>
+															</li>
+														@endforeach
+													</ul>
+												</div>
+											@endif
 										</div>
 									</div>
 
